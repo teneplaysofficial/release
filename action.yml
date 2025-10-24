@@ -1,0 +1,106 @@
+name: 'Release Hub'
+description: 'Automate and streamline your GitHub release workflow. Build, tag, and publish releases with ease'
+author: 'Sriman'
+
+branding:
+  icon: 'terminal'
+  color: 'gray-dark'
+
+inputs:
+  github_token:
+    description: 'GitHub token used to authenticate API requests'
+    required: false
+
+  jsr:
+    description: 'Whether to publish the release to JSR registry (true/false)'
+    required: false
+    default: false
+
+  jsr_args:
+    description: 'Additional arguments to pass to the JSR publish command'
+    required: false
+
+  npm:
+    description: 'Whether to publish the release to NPM registry (true/false)'
+    required: false
+    default: false
+
+  npm_token:
+    description: 'NPM token used to authenticate NPM registry'
+    required: false
+
+  npm_args:
+    description: 'Additional arguments to pass to the NPM publish command'
+    required: false
+    default: |
+      --provenance
+
+  default_release_type:
+    description: 'Default type of version bump for the release'
+    required: false
+    default: 'patch'
+
+  init_version:
+    description: 'The initial version to use if no tags exist in the repository (e.g., 1.0.0)'
+    required: false
+    default: '0.0.0'
+
+  owner:
+    description: 'The GitHub repository owner, Defaults to the repository running the workflow'
+    required: false
+
+  repo:
+    description: 'The GitHub repository name, Defaults to the repository running the workflow'
+    required: false
+
+  branch:
+    description: 'The branch to target for commits and tags, Defaults to the current branch or in pull requests source branch'
+    required: false
+
+  git_username:
+    description: 'Git username for committing changes'
+    required: false
+    default: 'github-actions[bot]'
+
+  git_email:
+    description: 'Git email for committing changes'
+    required: false
+    default: 'github-actions[bot]@users.noreply.github.com'
+
+  commit_message:
+    description: 'Commit message for version bump commits'
+    required: false
+    default: 'Release $VERSION'
+
+  changelog_file:
+    description: 'Path to the changelog file to update with release notes'
+    required: false
+    default: 'CHANGELOG.md'
+
+  tag:
+    description: 'Create a git tag for the new version (true/false)'
+    required: false
+    default: true
+
+  major_tag:
+    description: 'Create a major git tag (e.g., v1) for the new version (true/false)'
+    required: false
+    default: false
+
+  minor_tag:
+    description: 'Create a minor git tag (e.g., v1.2) for the new version (true/false)'
+    required: false
+    default: false
+
+outputs:
+  version:
+    description: 'Release version (e.g., 1.2.3)'
+  success:
+    description: 'Whether the release succeeded (true/false)'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+    NPM_TOKEN: ${{ inputs.npm_token }}
